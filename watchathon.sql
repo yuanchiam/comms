@@ -1,11 +1,28 @@
 -- in Hive
 use ychiam;
 
+GRANT Select on TABLE vault.device_esn_account_d to USER ychiam;
+-- https://confluence.netflix.com/display/DATA/Vault+Warehouse
+
 create table ychiam.watchathon_subs as
-select account_id, signup_date
-from dse.subscrn_d
-where is_open_access_signup=1
-and signup_date between 20170403 and 20170409;
+select distinct b1.account_id
+from
+    (select a.esn
+    from vault.device_esn_account_d a
+    join dse.subscrn_d b
+    on a.account_id=b.account_id
+    where b.is_open_access_signup=1
+    and b.signup_date between 20170403 and 20170409) a1
+join
+    (select esn, account_id
+    from vault.device_esn_account_d) b1
+on a1.esn=b1.esn;
+
+--create table ychiam.watchathon_subs as
+--select account_id, signup_date
+--from dse.subscrn_d
+--where is_open_access_signup=1
+--and signup_date between 20170403 and 20170409;
 
 -- in Tableau SQL
 select c1.*, rcr.has_recontact_cnt
