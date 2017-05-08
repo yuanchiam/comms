@@ -1,9 +1,9 @@
 -- in Hive
-use ychiam;
 
 GRANT Select on TABLE vault.device_esn_account_d to USER ychiam;
 -- https://confluence.netflix.com/display/DATA/Vault+Warehouse
 
+use ychiam;
 create table ychiam.watchathon_subs as
 select distinct b1.account_id
 from
