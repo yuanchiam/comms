@@ -6,9 +6,10 @@ GRANT Select on TABLE vault.device_esn_account_d to USER ychiam;
 drop table ychiam.watchathon_subs;
 use ychiam;
 create table ychiam.watchathon_subs as
-select distinct b1.account_id, a1.signup_date
+select distinct b1.account_id, a1.signup_date, a1.original_account
 from
-    (select a.esn, b.signup_date
+    (select a.esn, b.signup_date,
+    case when b.account_id is not null then 1 else 1 end as original_account
     from vault.device_esn_account_d a
     join dse.subscrn_d b
     on a.account_id=b.account_id
