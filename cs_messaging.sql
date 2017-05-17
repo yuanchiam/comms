@@ -15,8 +15,10 @@ join dse.msg_message_d msgd
 on msg.message_id=msgd.message_id
 where msg.send_utc_dateint>20170101
 
--- temp table
 
+
+-- temp table
+-------------
 select 
     a.message_guid,
     a.send_utc_dateint,
@@ -33,7 +35,8 @@ on a.message_id=b.message_id
 where a.message_id=12853
 and a.send_utc_dateint>20170501
 limit 100;
-
+-- temp table
+-------------
 
 
 select
