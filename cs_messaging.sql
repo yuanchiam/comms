@@ -1,4 +1,18 @@
 select 
+    msg_details.message_guid,
+    msg_details.send_utc_dateint,
+    msg_details.account_id,
+    msg_details.message_id,
+    msg_details.country_iso_code,
+    msg_details.status_desc,
+    msg_details.fail_reason_short_desc,
+    msg_details.message_name,
+    msg_details.channel
+    contact_details.*
+
+from
+
+(select 
     msg.message_guid,
     msg.send_utc_dateint,
     msg.account_id,
@@ -13,11 +27,11 @@ join etl.cs_message_id_entry ids
 on msg.message_id=ids.message_id
 join dse.msg_message_d msgd
 on msg.message_id=msgd.message_id
-where msg.send_utc_dateint>20170101
+where msg.send_utc_dateint>20170101 ) msg_details
 
+join
 
-
-select
+(select
     cf.contact_code,
     cf.call_center_id,
     cf.account_id,
@@ -68,4 +82,9 @@ where cf.fact_utc_date >= 20170101
 and r.escalation_code not in ('G-Escalation', 'SC-Consult','SC-Escalation','Corp-Escalation')
 and trt.major_transfer_type_desc not in ('TRANSFER_OUT')
 and cf.answered_cnt>0
-and cf.contact_subchannel_id in ('Phone', 'Chat', 'voip','InApp', 'MBChat')
+and cf.contact_subchannel_id in ('Phone', 'Chat', 'voip','InApp', 'MBChat') ) contact_details
+
+on msg_details.account_id=contact_details.account_id
+
+-- consider only calls after email/message sent
+where msg_details.send_utc_dateint>=contact_details.fact_utc_date
