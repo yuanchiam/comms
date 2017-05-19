@@ -87,4 +87,4 @@ and cf.contact_subchannel_id in ('Phone', 'Chat', 'voip','InApp', 'MBChat') ) co
 on msg_details.account_id=contact_details.account_id
 
 -- consider only calls after email/message sent
-where msg_details.send_utc_dateint>=contact_details.fact_utc_date
+where contact_details.fact_utc_date>=msg_details.send_utc_dateint
