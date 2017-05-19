@@ -1,4 +1,43 @@
 select 
+    msg.message_guid,
+    msg.send_utc_dateint,
+    msg.account_id,
+    msg.message_id,
+    msg.country_iso_code,
+    msg.status_desc,
+    msg.fail_reason_short_desc,
+    msgd.message_name,
+    msgd.channel
+from dse.msg_send_f msg
+join message_ids ids
+on msg.message_id=ids.message_id
+join dse.msg_message_d msgd
+on msg.message_id=msgd.message_id
+where msg.send_utc_dateint >= {from_date}
+and msg.send_utc_dateint <= {to_date_m1}
+
+---
+---
+---
+
+use ychiam;
+CREATE TABLE ychiam.cs_message_alloc (
+    message_guid string,
+    account_id bigint,
+    message_id bigint,
+    country_iso_code string,
+    status_desc string,
+    fail_reason_short_desc string,
+    message_name string,
+    channel string
+)
+PARTITIONED BY (send_utc_dateint bigint);
+
+---
+---
+---
+
+select 
     msg_details.message_guid,
     msg_details.send_utc_dateint,
     msg_details.account_id,
