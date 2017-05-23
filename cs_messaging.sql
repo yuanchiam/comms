@@ -1,14 +1,14 @@
 select 
     msg.message_guid,
-    msg.send_utc_dateint,
     msg.account_id,
     msg.message_id,
+    msg.send_epoch,
     msg.country_iso_code,
     msg.status_desc,
     msg.fail_reason_short_desc,
-    msg.send_epoch,
     msgd.message_name,
-    msgd.channel
+    msgd.channel,
+    msg.send_utc_dateint
 from dse.msg_send_f msg
 join message_ids ids
 on msg.message_id=ids.message_id
@@ -33,7 +33,8 @@ CREATE TABLE ychiam.cs_message_alloc (
     message_name string,
     channel string
 )
-PARTITIONED BY (send_utc_dateint bigint);
+PARTITIONED BY (send_utc_dateint bigint)
+STORED AS TEXTFILE;
 
 ---
 ---
