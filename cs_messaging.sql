@@ -6,7 +6,7 @@ select
     msg.country_iso_code,
     msg.status_desc,
     msg.fail_reason_short_desc,
-    msg.send_epoch
+    msg.send_epoch,
     msgd.message_name,
     msgd.channel
 from dse.msg_send_f msg
